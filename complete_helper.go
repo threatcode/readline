@@ -2,6 +2,7 @@ package readline
 
 import (
 	"bytes"
+	// "fmt"
 	"strings"
 )
 
@@ -135,7 +136,23 @@ func doInternal(p PrefixCompleterInterface, line []rune, pos int, origLine []run
 					goNext = true
 				}
 			} else {
-				if runes.HasPrefix(childName, line) {
+				var childNameLower = []rune{}
+				for _, v := range childName {
+					if int(v) >= 65 && int(v) <= 90 {
+						v += 32
+					}
+					childNameLower = append(childNameLower, v)
+				}
+
+				var lineLower = []rune{}
+				for _, v := range line {
+					if int(v) >= 65 && int(v) <= 90 {
+						v += 32
+					}
+					lineLower = append(lineLower, v)
+				}
+
+				if runes.HasPrefix(childNameLower, lineLower) {
 					newLine = append(newLine, childName[len(line):])
 					offset = len(line)
 					lineCompleter = child
@@ -163,3 +180,4 @@ func doInternal(p PrefixCompleterInterface, line []rune, pos int, origLine []run
 	}
 	return
 }
+
